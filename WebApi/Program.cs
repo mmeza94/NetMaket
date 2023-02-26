@@ -11,9 +11,6 @@ var app = builder.Build();
 
 
 
-//await MarketDbContextData.CargarData();
-
-
 
 
 // Configure the HTTP request pipeline.
