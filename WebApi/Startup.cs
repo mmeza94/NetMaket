@@ -20,6 +20,8 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
 
+            //Cuando arranque el programa se genera un objeto de tipo IGenericRepository por cada request que envie el cliente
+            services.AddScoped(typeof(IGenericRepository<>),(typeof(GenericRepository<>)));
 
             services.AddDbContext<MarketDbContext>(opt =>
             {

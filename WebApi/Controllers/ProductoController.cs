@@ -9,9 +9,9 @@ namespace WebApi.Controllers
     [ApiController]
     public class ProductoController : ControllerBase
     {
-        private readonly IProductoRepository productoRepository;
+        private readonly IGenericRepository<Producto> productoRepository;
 
-        public ProductoController(IProductoRepository productoRepository)
+        public ProductoController(IGenericRepository<Producto> productoRepository)
         {
             this.productoRepository = productoRepository;
         }
@@ -21,7 +21,7 @@ namespace WebApi.Controllers
         public async Task<ActionResult<List<Producto>>> GetProductos()
         {
             //Siempre que se devuelva un IReadonlyList, la info debe estar dentro del ok
-            var productos = await productoRepository.GetProductosAsync();
+            var productos = await productoRepository.GetAllAsync();
             return Ok(productos);
         }
 
@@ -30,7 +30,7 @@ namespace WebApi.Controllers
         [HttpGet("{Id}")]
         public async Task<ActionResult<Producto>> GetProducto(int Id)
         {
-            return await productoRepository.GetProductoByIdAsync(Id);
+            return await productoRepository.GetByIdAsync(Id);
 
         }
 

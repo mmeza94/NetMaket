@@ -22,12 +22,20 @@ namespace BusinessLogic.Logic
 
         public async Task<Producto> GetProductoByIdAsync(int Id)
         {
-            return await context.Productos.FindAsync(Id);
+            var result =  await context.Productos
+                                .Include(p => p.Marca)
+                                .Include(p => p.Categoria)
+                                .FirstOrDefaultAsync( p => p.Id == Id);
+
+            return result;
         }
 
         public async Task<IReadOnlyList<Producto>> GetProductosAsync()
         {
-            return await context.Productos.ToListAsync();
+            return await context.Productos
+                                .Include(p => p.Marca)
+                                .Include(p => p.Categoria)
+                                .ToListAsync();
         }
     }
 }
