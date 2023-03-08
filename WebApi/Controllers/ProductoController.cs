@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
+using Core.Specifications;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,7 +22,9 @@ namespace WebApi.Controllers
         public async Task<ActionResult<List<Producto>>> GetProductos()
         {
             //Siempre que se devuelva un IReadonlyList, la info debe estar dentro del ok
-            var productos = await productoRepository.GetAllAsync();
+
+            var spec = new ProductoWithCategoriaAndMarcaSpecification();
+            var productos = await productoRepository.GetAllWithSpec(spec);
             return Ok(productos);
         }
 
@@ -30,7 +33,11 @@ namespace WebApi.Controllers
         [HttpGet("{Id}")]
         public async Task<ActionResult<Producto>> GetProducto(int Id)
         {
-            return await productoRepository.GetByIdAsync(Id);
+            //Spec: debe incluir la logica  de la condicion  de la consulta  y tambien las relaciones entre las entidades
+            //relacion entre producto y marca,categoria
+
+            var spec = new ProductoWithCategoriaAndMarcaSpecification(Id);
+            return await productoRepository.GetByIdWithSpec(spec);
 
         }
 

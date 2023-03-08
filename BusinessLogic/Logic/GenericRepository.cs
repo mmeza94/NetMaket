@@ -30,6 +30,11 @@ namespace BusinessLogic.Logic
         }
 
 
+
+
+
+
+
         public async Task<IReadOnlyList<T>> GetAllWithSpec(ISpecification<T> spec)
         {
             return await ApplySpecification(spec).ToListAsync();
