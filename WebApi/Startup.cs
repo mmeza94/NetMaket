@@ -2,6 +2,7 @@
 using BusinessLogic.Logic;
 using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using WebApi.Dtos;
 
 namespace WebApi
 {
@@ -19,6 +20,9 @@ namespace WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddAutoMapper(typeof(MappingProfile));
+
 
             //Cuando arranque el programa se genera un objeto de tipo IGenericRepository por cada request que envie el cliente
             services.AddScoped(typeof(IGenericRepository<>),(typeof(GenericRepository<>)));

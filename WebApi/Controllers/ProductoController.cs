@@ -1,8 +1,10 @@
-﻿using Core.Entities;
+﻿using AutoMapper;
+using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Dtos;
 
 namespace WebApi.Controllers
 {
@@ -11,10 +13,12 @@ namespace WebApi.Controllers
     public class ProductoController : ControllerBase
     {
         private readonly IGenericRepository<Producto> productoRepository;
+        private readonly IMapper mapper;
 
-        public ProductoController(IGenericRepository<Producto> productoRepository)
+        public ProductoController(IGenericRepository<Producto> productoRepository, IMapper mapper)
         {
             this.productoRepository = productoRepository;
+            this.mapper = mapper;
         }
 
 
@@ -25,19 +29,22 @@ namespace WebApi.Controllers
 
             var spec = new ProductoWithCategoriaAndMarcaSpecification();
             var productos = await productoRepository.GetAllWithSpec(spec);
-            return Ok(productos);
+            return Ok(mapper.Map<IReadOnlyList<Producto>,IReadOnlyList<ProductoDto>>(productos));
         }
 
 
 
         [HttpGet("{Id}")]
-        public async Task<ActionResult<Producto>> GetProducto(int Id)
+        public async Task<ActionResult<ProductoDto>> GetProducto(int Id)
         {
             //Spec: debe incluir la logica  de la condicion  de la consulta  y tambien las relaciones entre las entidades
             //relacion entre producto y marca,categoria
 
             var spec = new ProductoWithCategoriaAndMarcaSpecification(Id);
-            return await productoRepository.GetByIdWithSpec(spec);
+            var producto =  await productoRepository.GetByIdWithSpec(spec);
+
+            //<origen, destino>
+            return mapper.Map<Producto,ProductoDto>(producto);
 
         }
 
