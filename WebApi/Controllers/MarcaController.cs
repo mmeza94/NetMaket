@@ -5,9 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class MarcaController : ControllerBase
+
+    public class MarcaController : BaseApiController
     {
         private readonly IGenericRepository<Marca> marcaRepository;
 

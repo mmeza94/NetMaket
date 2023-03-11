@@ -3,6 +3,7 @@ using BusinessLogic.Logic;
 using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Dtos;
+using WebApi.Middleware;
 
 namespace WebApi
 {
@@ -44,7 +45,13 @@ namespace WebApi
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
+
+            app.UseMiddleware<ExceptionMiddleware>();
+
             app.UseHttpsRedirection();
+
+            app.UseStatusCodePagesWithReExecute("/errors","?code={0}"); //para que el code tambien se imprima para el cliente
+            //If you want to intercept status codes in production and return custom error pages
 
             app.UseRouting();
 
