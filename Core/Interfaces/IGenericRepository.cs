@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Core.Interfaces
 {
-    public interface IGenericRepository<T> where T:ClaseBase
+    public interface IGenericRepository<T> where T : ClaseBase
     {
         Task<T> GetByIdAsync(int id);
 

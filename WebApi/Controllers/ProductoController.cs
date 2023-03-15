@@ -23,11 +23,11 @@ namespace WebApi.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<List<Producto>>> GetProductos()
+        public async Task<ActionResult<List<Producto>>> GetProductos(string sort, int? marca, int? categoria)
         {
             //Siempre que se devuelva un IReadonlyList, la info debe estar dentro del ok
 
-            var spec = new ProductoWithCategoriaAndMarcaSpecification();
+            var spec = new ProductoWithCategoriaAndMarcaSpecification(sort, marca, categoria);
             var productos = await productoRepository.GetAllWithSpec(spec);
             return Ok(mapper.Map<IReadOnlyList<Producto>,IReadOnlyList<ProductoDto>>(productos));
         }
