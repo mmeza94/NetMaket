@@ -40,6 +40,15 @@ namespace WebApi
             //Esto para que sean agiles, rapidos y de corta duracion
             services.AddTransient<IProductoRepository,ProductoRepository>();
             services.AddControllers();
+
+
+            services.AddCors( opt =>
+            {
+                opt.AddPolicy("CorsRule", rule =>
+                {
+                    rule.AllowAnyHeader().AllowAnyMethod().WithOrigins("*");
+                });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -54,6 +63,8 @@ namespace WebApi
             //If you want to intercept status codes in production and return custom error pages
 
             app.UseRouting();
+
+            app.UseCors("CorsRule");
 
 
             app.UseAuthorization();

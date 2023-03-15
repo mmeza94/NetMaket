@@ -15,7 +15,7 @@ namespace Core.Specifications
 
         }
 
-        public BaseSpecification(Expression<Func<T,bool>> criteria)
+        public BaseSpecification(Expression<Func<T, bool>> criteria)
         {
             Criteria = criteria;
         }
@@ -42,15 +42,34 @@ namespace Core.Specifications
 
         public Expression<Func<T, object>> OrderByDescending { get; private set; }
 
+
+
         protected void AddOrderBy(Expression<Func<T, object>> OrderByExpression)
         {
             OrderBy = OrderByExpression;
         }
 
-        protected void AddOrderByDescending(Expression<Func<T,object>> OrderByDescendingExpression)
+        protected void AddOrderByDescending(Expression<Func<T, object>> OrderByDescendingExpression)
         {
             OrderByDescending = OrderByDescendingExpression;
 
+        }
+
+
+
+        public int Take { get; private set; }
+
+        public int Skip { get; private set; }
+
+        public bool IsPaginationEnabled { get; private set; }
+
+
+
+        protected void ApplyPagination(int skip, int take)
+        {
+            this.Take = take;
+            this.Skip = skip;
+            this.IsPaginationEnabled = true;
         }
 
 

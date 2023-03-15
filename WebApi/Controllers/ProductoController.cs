@@ -22,15 +22,41 @@ namespace WebApi.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<ActionResult<List<Producto>>> GetProductos(string sort, int? marca, int? categoria)
+
+
+        [HttpGet] 
+        public async Task<ActionResult<Pagination<ProductoDto>>> GetProductos([FromQuery]ProductoSpecificationParams productoParams)
         {
             //Siempre que se devuelva un IReadonlyList, la info debe estar dentro del ok
 
-            var spec = new ProductoWithCategoriaAndMarcaSpecification(sort, marca, categoria);
+            var spec = new ProductoWithCategoriaAndMarcaSpecification(productoParams);
+
             var productos = await productoRepository.GetAllWithSpec(spec);
-            return Ok(mapper.Map<IReadOnlyList<Producto>,IReadOnlyList<ProductoDto>>(productos));
+
+            var specCount = new ProductoForCountingSpecification(productoParams);
+
+            var totalProductos = await productoRepository.CountAsync(specCount);
+
+            var rounded = Math.Ceiling(Convert.ToDecimal(totalProductos / productoParams.pageSize)); // me devuelve la cantidad de paginas
+
+            var totalPages = Convert.ToInt32(rounded);
+
+            var data = mapper.Map<IReadOnlyList<Producto>, IReadOnlyList<ProductoDto>>(productos);
+
+            return Ok(
+                        new Pagination<ProductoDto>
+                        {
+                            Count = totalProductos,
+                            Data = data,
+                            PageCount = totalPages,
+                            PageIndex = productoParams.PageIndex,
+                            PageSize = productoParams.pageSize
+                        }
+                    );
+            //return Ok(mapper.Map<IReadOnlyList<Producto>,IReadOnlyList<ProductoDto>>(productos));
         }
+
+
 
 
 
